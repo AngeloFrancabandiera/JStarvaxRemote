@@ -83,6 +83,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             LightSetEventHandler lightHandler = new LightSetEventHandler( (LightPresetFragment)fragment,
                     mRequestFormatter, mServerConnection);
             break;
+
          default:
             break;
       }
