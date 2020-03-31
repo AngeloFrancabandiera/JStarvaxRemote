@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Starvax remote</string>
+
+
+    <string name="tab_text_connection"></string>
+    <string name="tab_text_playlistA"></string>
+    <string name="tab_text_playlistB"></string>
+    <string name="tab_text_lightPreset"></string>
+    <string name="tab_text_openWebNet"></string>
+
+
+    <!-- Connection page: labels -->
+    <string name="connectionPage_serverIP">Server IP address</string>
+    <string name="connectionPage_password">Password</string>
+
+    <!-- Connection page: buttons -->
+    <string name="connectionPage_connect">CONNECT</string>
+    <string name="connectionPage_reload">SYNCH</string>
+    <string name="connectionPage_disconnect">DISCONNECT</string>
+    <string name="connectionPage_sendPassword">LOGIN</string>
+
+
+    <!-- playlist page: labels -->
+    <string name="playlistPage_caption">This is playlist %1$s</string>
+
+    <!-- light preset fragment -->
+    <string name="lightPresetPage_caption">Light preset</string>
+    <string name="lightPresetPage_trigger">TRIGGER</string>
+</resources>

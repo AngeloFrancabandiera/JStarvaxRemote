@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.main.PlaylistFragment"
+    android:padding="10dp">
+
+         <TextView
+            android:id="@+id/text_topCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lightPresetPage_caption"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/playlist_items"
+            android:layout_weight="80"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+        <LinearLayout
+            android:layout_weight="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/button_play"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/button_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/button_stop"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/button_rewind"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:text="" />
+        </LinearLayout>
+
+</LinearLayout>

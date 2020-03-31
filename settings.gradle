@@ -1,0 +1,3 @@
+rootProject.name='Starvax Remote'
+include ':app'
+include ':core'
