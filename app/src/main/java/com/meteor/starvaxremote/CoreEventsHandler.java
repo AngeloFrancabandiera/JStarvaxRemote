@@ -1,11 +1,15 @@
 package com.meteor.starvaxremote;
 import com.meteor.remote.core.interfaces.CoreEventListener;
 import com.meteor.remote.core.models.ConnectionServerModel;
+import com.meteor.starvaxremote.ui.main.ItemAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class CoreEventsHandler implements CoreEventListener {
 
    private final ConnectionServerModel mConnectionData;
+   private List<ItemAdapter> mListeningAdapterList = new ArrayList<>();
 
    public CoreEventsHandler(ConnectionServerModel connectionData) {
       mConnectionData = connectionData;
@@ -33,5 +37,14 @@ public class CoreEventsHandler implements CoreEventListener {
    public void onShowReloaded(String showTitle) {
       System.out.println("onShowReloaded. Title:" + showTitle);
       mConnectionData.setShowTitle( showTitle);
+
+      // notify data changed for all subscribed adapters
+      for (ItemAdapter adapter : mListeningAdapterList) {
+         adapter.notifyDataSetChanged();
+      }
+   }
+
+   public void addListeningAdapter(ItemAdapter adapter) {
+      mListeningAdapterList.add( adapter);
    }
 }

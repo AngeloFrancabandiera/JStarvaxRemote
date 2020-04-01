@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.meteor.remote.core.models.ListItem;
+import com.meteor.starvaxremote.CoreEventsHandler;
 import com.meteor.starvaxremote.R;
 import com.meteor.starvaxremote.repository.ShowRepository;
 
@@ -60,12 +61,12 @@ public class PlaylistFragment extends Fragment
 
    private PlaylistFragment.PlaylistEventListener mEventListener;
    private static ShowRepository mRepository;
+   private static CoreEventsHandler mCoreEventsHandler;
 
    /* used by bundle */
    private static final String ARG_PARAM_INDEX_1 = "line";
 
    private String mLine;
-//   private Context mContext;
 
 
    public PlaylistFragment() {
@@ -76,10 +77,12 @@ public class PlaylistFragment extends Fragment
    /**
     * This works as the actual constructor
     */
-   static PlaylistFragment newInstance( String line, ShowRepository repository) {
+   static PlaylistFragment newInstance(String line, ShowRepository repository,
+                                       CoreEventsHandler coreEventsHandler) {
       PlaylistFragment fragment = new PlaylistFragment();
 
       mRepository = repository;
+      mCoreEventsHandler = coreEventsHandler;
 
       Bundle args = new Bundle();
       args.putString(ARG_PARAM_INDEX_1, line);
@@ -150,6 +153,7 @@ public class PlaylistFragment extends Fragment
          adapter = new ItemAdapter(mRepository.getPlaylistData_A().getValue());
          listView.setAdapter(adapter);
          adapter.setOnItemClickedListener( this);
+         mCoreEventsHandler.addListeningAdapter( adapter);
       } else if (mLine.equals("B")) {
          adapter = new ItemAdapter(mRepository.getPlaylistData_B().getValue());
          listView.setAdapter(adapter);

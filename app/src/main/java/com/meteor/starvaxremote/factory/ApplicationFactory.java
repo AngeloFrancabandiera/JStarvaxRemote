@@ -10,7 +10,6 @@ import com.meteor.remote.Network.RxThread;
 import com.meteor.remote.core.Request;
 import com.meteor.remote.core.RequestAgent;
 import com.meteor.remote.core.SupportedFiles;
-import com.meteor.remote.core.interfaces.CoreEventListener;
 import com.meteor.remote.core.interfaces.SystemNotification;
 import com.meteor.remote.core.models.ConnectionServerModel;
 import com.meteor.remote.core.models.GeneralListModel;
@@ -46,7 +45,7 @@ public class ApplicationFactory {
    private NetworkServerConnection NetworkServerConnection_instance;
    private RequestAgent RequestAgent_instance;
    private RequestFormatter requestFormatter_instance;
-   private CoreEventListener coreEvents_instance;
+   private CoreEventsHandler coreEvents_instance;
 
    public void build(final Context context) {
       SupportedFiles supportedFiles_instance = new SupportedFiles();
@@ -184,7 +183,7 @@ public class ApplicationFactory {
       return RequestAgent_instance;
    }
 
-   public CoreEventListener coreEventListener() {
+   public CoreEventsHandler coreEventsHandler() {
       return coreEvents_instance;
    }
 }

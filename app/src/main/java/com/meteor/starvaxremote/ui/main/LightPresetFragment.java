@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.meteor.remote.core.models.ListItem;
+import com.meteor.starvaxremote.CoreEventsHandler;
 import com.meteor.starvaxremote.R;
 import com.meteor.starvaxremote.repository.ShowRepository;
 
@@ -44,6 +45,7 @@ public class LightPresetFragment extends Fragment
 
    private LightPresetEventListener mEventListener;
    private static ShowRepository mRepository;
+   private static CoreEventsHandler mCoreEventsHandler;
 
    public LightPresetFragment() {
       // Required empty public constructor.
@@ -53,14 +55,14 @@ public class LightPresetFragment extends Fragment
    /**
     * This works as the actual constructor
     */
-   static LightPresetFragment newInstance(ShowRepository repository) {
+   static LightPresetFragment newInstance(ShowRepository repository,
+                                          CoreEventsHandler coreEventsHandler) {
       LightPresetFragment fragment = new LightPresetFragment();
 
       mRepository = repository;
+      mCoreEventsHandler = coreEventsHandler;
 
       Bundle args = new Bundle();
-//      args.putString(ARG_PARAM1, param1);
-//      args.putString(ARG_PARAM2, param2);
       fragment.setArguments(args);
       return fragment;
    }
@@ -69,10 +71,6 @@ public class LightPresetFragment extends Fragment
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-//      if (getArguments() != null) {
-//         mParam1 = getArguments().getString(ARG_PARAM1);
-//         mParam2 = getArguments().getString(ARG_PARAM2);
-//      }
    }
 
    @Override
@@ -105,6 +103,7 @@ public class LightPresetFragment extends Fragment
       adapter = new ItemAdapter(mRepository.getLightPresets().getValue());
       listView.setAdapter(adapter);
       adapter.setOnItemClickedListener( this);
+      mCoreEventsHandler.addListeningAdapter( adapter);
 
       listView.setLayoutManager(new LinearLayoutManager(getActivity()));
    }
