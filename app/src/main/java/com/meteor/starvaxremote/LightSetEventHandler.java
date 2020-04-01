@@ -12,7 +12,6 @@ import java.util.List;
 
 public class LightSetEventHandler implements LightPresetFragment.LightPresetEventListener {
 
-//   private final LightPresetFragment mLightSetFragment;
    private final RequestFormatter mRequestFormatter;
    private final ServerConnection mServerConnection;
 
@@ -21,7 +20,6 @@ public class LightSetEventHandler implements LightPresetFragment.LightPresetEven
    public LightSetEventHandler(LightPresetFragment lightSetFragment,
                                RequestFormatter requestFormatter,
                                ServerConnection serverConnection) {
-//      mLightSetFragment = lightSetFragment;
       mRequestFormatter = requestFormatter;
       mServerConnection = serverConnection;
 

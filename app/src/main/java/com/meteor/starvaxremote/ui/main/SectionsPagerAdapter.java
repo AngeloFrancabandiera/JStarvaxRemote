@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.meteor.remote.core.RequestAgent;
 import com.meteor.remote.core.protocol.RequestFormatter;
 import com.meteor.remote.core.protocol.ServerConnection;
+import com.meteor.starvaxremote.PlaylistEventHandler;
 import com.meteor.starvaxremote.R;
 import com.meteor.starvaxremote.LightSetEventHandler;
 import com.meteor.starvaxremote.factory.ApplicationFactory;
@@ -71,12 +72,19 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             fragment = new ConnectionFragment(mContext, mRepository,
                     mServerConnection, mRequestFormatter, mRequestAgent);
             break;
+
          case 1:
-            fragment = new PlaylistFragment("A", mContext, mRepository);
+            fragment = PlaylistFragment.newInstance("A", mRepository);
+            PlaylistEventHandler playlistEventHandlerA = new PlaylistEventHandler( (PlaylistFragment)fragment,
+                    mRequestFormatter, mServerConnection);
             break;
+
          case 2:
-            fragment = new PlaylistFragment("B", mContext, mRepository);
+            fragment = PlaylistFragment.newInstance("B", mRepository);
+            PlaylistEventHandler playlistEventHandlerB = new PlaylistEventHandler( (PlaylistFragment)fragment,
+                    mRequestFormatter, mServerConnection);
             break;
+
          case 3:
          case 4:
             fragment = LightPresetFragment.newInstance(mRepository);

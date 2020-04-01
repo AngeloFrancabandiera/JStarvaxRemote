@@ -64,6 +64,8 @@ public class LightPresetFragment extends Fragment
       fragment.setArguments(args);
       return fragment;
    }
+
+
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -105,7 +107,6 @@ public class LightPresetFragment extends Fragment
       adapter.setOnItemClickedListener( this);
 
       listView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
    }
 
    @Override
