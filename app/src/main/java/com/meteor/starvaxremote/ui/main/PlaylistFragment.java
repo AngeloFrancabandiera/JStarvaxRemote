@@ -18,6 +18,8 @@ import com.meteor.starvaxremote.R;
 import com.meteor.starvaxremote.repository.ShowRepository;
 
 import java.util.Objects;
+import java.util.Observable;
+import java.util.Observer;
 
 public class PlaylistFragment extends Fragment
         implements View.OnClickListener, ItemAdapter.ItemClickedListener {

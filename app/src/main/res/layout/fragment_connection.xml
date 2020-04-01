@@ -13,7 +13,6 @@
             android:id="@+id/text_label_serverIP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:editable="false"
             android:text="@string/connectionPage_serverIP"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -53,8 +52,6 @@
             android:id="@+id/text_show_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:editable="false"
-            android:text="..."
             android:textSize="22sp"
             android:textStyle="bold" />
 

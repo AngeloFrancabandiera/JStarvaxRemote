@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.meteor.remote.core.RequestAgent;
+import com.meteor.remote.core.interfaces.CoreEventListener;
 import com.meteor.remote.core.protocol.RequestFormatter;
 import com.meteor.remote.core.protocol.ServerConnection;
 import com.meteor.starvaxremote.PlaylistEventHandler;
@@ -30,8 +31,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
            R.string.tab_text_connection,
            R.string.tab_text_playlistA,
            R.string.tab_text_playlistB,
-            R.string.tab_text_lightPreset,
-            R.string.tab_text_openWebNet
+           R.string.tab_text_lightPreset,
+           R.string.tab_text_openWebNet
    };
    private final Context mContext;
 
@@ -39,6 +40,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
    private final ServerConnection mServerConnection;
    private final RequestFormatter mRequestFormatter;
    private final RequestAgent mRequestAgent;
+   private final CoreEventListener mCoreEventListener;
 
    public SectionsPagerAdapter(Context context,
                                FragmentManager fm) {
@@ -59,6 +61,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
       mRequestFormatter = mApplicationFactory.requestFormatter();
       mRequestAgent = mApplicationFactory.requestAgent();
 
+      mCoreEventListener = mApplicationFactory.coreEventListener();
+
    }
 
    @Override
@@ -69,7 +73,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
       Fragment fragment = new Fragment();
       switch (position) {
          case 0:
-            fragment = new ConnectionFragment(mContext, mRepository,
+            fragment = new ConnectionFragment( mRepository,
                     mServerConnection, mRequestFormatter, mRequestAgent);
             break;
 

@@ -5,13 +5,12 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.meteor.remote.Network.ConnectionThread;
-import com.meteor.remote.Network.RxThread;
 import com.meteor.remote.Network.NetworkServerConnection;
+import com.meteor.remote.Network.RxThread;
 import com.meteor.remote.core.Request;
 import com.meteor.remote.core.RequestAgent;
 import com.meteor.remote.core.SupportedFiles;
 import com.meteor.remote.core.interfaces.CoreEventListener;
-import com.meteor.remote.core.interfaces.RequestSender;
 import com.meteor.remote.core.interfaces.SystemNotification;
 import com.meteor.remote.core.models.ConnectionServerModel;
 import com.meteor.remote.core.models.GeneralListModel;
@@ -45,9 +44,9 @@ public class ApplicationFactory {
    private GeneralListModel OwnModel_instance;
 
    private NetworkServerConnection NetworkServerConnection_instance;
-   private WireRequestSender RequestSender_instance;
    private RequestAgent RequestAgent_instance;
    private RequestFormatter requestFormatter_instance;
+   private CoreEventListener coreEvents_instance;
 
    public void build(final Context context) {
       SupportedFiles supportedFiles_instance = new SupportedFiles();
@@ -59,16 +58,19 @@ public class ApplicationFactory {
       GeneralListModel sequenceModel_instance = new GeneralListModel();
       OwnModel_instance = new GeneralListModel();
 
+      ConnectionServerData_instance = new ConnectionServerModel();
+      coreEvents_instance = new CoreEventsHandler(ConnectionServerData_instance);
+
       ReplyDispatcher replyDispatcher_instance = new ReplyDispatcher();
       InputParser inputParser_instance = new InputParser(replyDispatcher_instance);
       BlockingQueue<List<Byte>> rxDataQueue_instance = new LinkedBlockingQueue<>();
-      RxThread rxThread_instance = new RxThread(rxDataQueue_instance);
+      RxThread rxThread_instance = new RxThread(rxDataQueue_instance, coreEvents_instance);
       ConnectionThread connectionThread_instance = new ConnectionThread(rxThread_instance);
       NetworkServerConnection_instance = new NetworkServerConnection(connectionThread_instance,
               rxThread_instance,
               rxDataQueue_instance);
       requestFormatter_instance = new RequestFormatter();
-      RequestSender_instance = new WireRequestSender(NetworkServerConnection_instance,
+      WireRequestSender requestSender_instance = new WireRequestSender(NetworkServerConnection_instance,
               requestFormatter_instance);
 
       SystemNotification theSystemNotification = new SystemNotification() {
@@ -90,12 +92,8 @@ public class ApplicationFactory {
       RxThreadBridge rxBridge = new RxThreadBridge(rxNetworkHandler, inputParser_instance,
               NetworkServerConnection_instance);
 
-      RequestAgent_instance = new RequestAgent(RequestSender_instance,
+      RequestAgent_instance = new RequestAgent(requestSender_instance,
               OWN_ZoneToWhereTable_instance);
-
-      ConnectionServerData_instance = new ConnectionServerModel();
-
-      CoreEventListener coreEvents_instance = new CoreEventsHandler(ConnectionServerData_instance);
 
       DefaultReply defaultReply_instance = new DefaultReply(theSystemNotification);
       ConnectReply connectReply_instance = new ConnectReply(coreEvents_instance,
@@ -145,9 +143,9 @@ public class ApplicationFactory {
 //      return RequestAgent_instance;
 //   }
 
-   public RequestSender getRequestSender() {
-      return RequestSender_instance;
-   }
+//   public RequestSender getRequestSender() {
+//      return RequestSender_instance;
+//   }
 
 //OWN_ZoneToWhereTable getOwnZoneToWhereTable()
 //{
@@ -184,5 +182,9 @@ public class ApplicationFactory {
 
    public RequestAgent requestAgent() {
       return RequestAgent_instance;
+   }
+
+   public CoreEventListener coreEventListener() {
+      return coreEvents_instance;
    }
 }

@@ -1,6 +1,5 @@
 package com.meteor.starvaxremote.ui.main;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,32 +8,30 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.meteor.remote.Utils.Utils;
 import com.meteor.remote.core.Request;
 import com.meteor.remote.core.RequestAgent;
-import com.meteor.remote.core.interfaces.RequestSender;
 import com.meteor.remote.core.models.ConnectionServerModel;
-import com.meteor.remote.core.protocol.Protocol;
 import com.meteor.remote.core.protocol.RequestFormatter;
 import com.meteor.remote.core.protocol.ServerConnection;
 import com.meteor.starvaxremote.R;
 import com.meteor.starvaxremote.repository.ShowRepository;
-import com.meteor.remote.Utils.Utils;
+
+import java.util.List;
+import java.util.Objects;
 
 public class ConnectionFragment extends Fragment implements View.OnClickListener {
 
    private final ShowRepository mRepository;
-   private final Context mContext;
    private final RequestAgent mRequestAgent;
    private ServerConnection mServerConnection;
    private RequestFormatter mRequestFormatter;
+   private String mLastShowTitle = "...";
 
    // GUI
    private Button mConnectButton;
@@ -44,14 +41,12 @@ public class ConnectionFragment extends Fragment implements View.OnClickListener
    private TextView mServerAddressText;
    private EditText mPasswordText;
 
-   public ConnectionFragment(Context aContext,
-                             ShowRepository repository,
-                             ServerConnection serverConnection,
-                             RequestFormatter requestFormatter,
-                             RequestAgent requestAgent) {
+   ConnectionFragment(ShowRepository repository,
+                      ServerConnection serverConnection,
+                      RequestFormatter requestFormatter,
+                      RequestAgent requestAgent) {
       // Required empty public constructor
       mRepository = repository;
-      mContext = aContext;
       mServerConnection = serverConnection;
       mRequestFormatter = requestFormatter;
       mRequestAgent = requestAgent;
@@ -68,7 +63,7 @@ public class ConnectionFragment extends Fragment implements View.OnClickListener
                             Bundle savedInstanceState) {
       View root = inflater.inflate(R.layout.fragment_connection, container, false);
 
-      mRepository.getConnectionData().observe((AppCompatActivity) mContext,
+      mRepository.getConnectionData().observe(Objects.requireNonNull(getActivity()),
               new Observer<ConnectionServerModel>() {
                  @Override
                  public void onChanged(ConnectionServerModel connectionServerModel) {
@@ -80,9 +75,9 @@ public class ConnectionFragment extends Fragment implements View.OnClickListener
    }
 
    @Override
-   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-      mConnectButton = getView().findViewById(R.id.connectionPage_connect);
+      mConnectButton = Objects.requireNonNull(getView()).findViewById(R.id.connectionPage_connect);
       mConnectButton.setOnClickListener(this);
 
       mSendPwdButton = getView().findViewById(R.id.connectionPage_sendPassword);
@@ -97,20 +92,55 @@ public class ConnectionFragment extends Fragment implements View.OnClickListener
       mServerAddressText = getView().findViewById(R.id.text_serverIP);
       mPasswordText = getView().findViewById(R.id.text_Password);
 
-      /**** temp !!! remove !!!! ****/
+      TextView titleView = getView().findViewById(R.id.text_show_title);
+      titleView.setText( mLastShowTitle);
+
+      // initial state
+      updateConnectionData( mRepository.getConnectionData().getValue());
+
+      /* *** temp !!! remove !!!! *** */
       mServerAddressText.setText("192.168.1.6");
       mPasswordText.setText("remoto");
-      /*******************************/
+      /* ***************************** */
    }
 
    private void updateConnectionData(ConnectionServerModel model) {
+      mLastShowTitle = model.getShowTitle();
       if (getView() != null) {
          TextView titleView = getView().findViewById(R.id.text_show_title);
-         titleView.setText(model.getShowTitle());
+         titleView.setText( mLastShowTitle);
+      }
+
+      try {
+
+         switch (model.getConnectionState()) {
+            default:
+            case ConnectionServerModel.DISCONNECTED:
+               mConnectButton.setEnabled(true);
+               mSendPwdButton.setEnabled(false);
+               mDisconnectButton.setEnabled(false);
+               mSynchronizeButton.setEnabled(false);
+               break;
+            case ConnectionServerModel.CONNECTED:
+               mConnectButton.setEnabled(false);
+               mSendPwdButton.setEnabled(true);
+               mDisconnectButton.setEnabled(true);
+               mSynchronizeButton.setEnabled(false);
+               break;
+            case ConnectionServerModel.LOGGED_IN:
+               mConnectButton.setEnabled(false);
+               mSendPwdButton.setEnabled(false);
+               mDisconnectButton.setEnabled(true);
+               mSynchronizeButton.setEnabled(true);
+               break;
+         }
+      }
+      catch ( NullPointerException ex) {
+         // no problem; this happens on startup
       }
    }
 
-   /**
+   /*
     * Button management
     */
    @Override

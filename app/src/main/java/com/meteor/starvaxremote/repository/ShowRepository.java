@@ -90,15 +90,16 @@ public class ShowRepository implements Observer {
    public void update(Observable observable, Object o) {
 
       if (observable == mConnectionData) {
-         mConnectionData_ref.setValue(mConnectionData);
+         // use 'post' because socket connection may change in background thread
+         mConnectionData_ref.postValue(mConnectionData);
       } else if (observable == mPlaylistA) {
-         mPlaylistA_ref.setValue(mPlaylistA);
+         mPlaylistA_ref.postValue(mPlaylistA);
       } else if (observable == mPlaylistB) {
-         mPlaylistB_ref.setValue(mPlaylistB);
+         mPlaylistB_ref.postValue(mPlaylistB);
       } else if (observable == mLightPresets) {
-         mLightPresets_ref.setValue(mLightPresets);
+         mLightPresets_ref.postValue(mLightPresets);
       } else if (observable == mOwnLights) {
-         mOwnLights_ref.setValue(mOwnLights);
+         mOwnLights_ref.postValue(mOwnLights);
       }
    }
 }

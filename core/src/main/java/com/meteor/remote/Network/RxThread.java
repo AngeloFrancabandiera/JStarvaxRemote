@@ -1,5 +1,6 @@
 package com.meteor.remote.Network;
 import com.meteor.remote.Utils.Utils;
+import com.meteor.remote.core.interfaces.CoreEventListener;
 import com.meteor.remote.core.protocol.InputParser;
 import com.meteor.remote.core.protocol.ServerConnection;
 
@@ -14,11 +15,14 @@ public class RxThread implements Runnable {
    private Socket _Socket;
    private final byte[] _InputBuffer = new byte[1024];
    private final BlockingQueue<List<Byte>> _RxQueue;
+   private final CoreEventListener mCoreEventListener;
    private ServerConnection.RxListener _RxListener;
    private Semaphore _EventSemaphore = new Semaphore(0);
 
-   public RxThread(BlockingQueue<List<Byte>> rxQueue) {
+   public RxThread(BlockingQueue<List<Byte>> rxQueue,
+                   CoreEventListener coreEventListener) {
       _RxQueue = rxQueue;
+      mCoreEventListener = coreEventListener;
    }
 
    @Override
@@ -72,5 +76,8 @@ public class RxThread implements Runnable {
             keepRunning = false;
          }
       }
+
+      // here socket was closed
+      mCoreEventListener.onDisconnectedFromServer();
    }
 }
