@@ -1,6 +1,10 @@
 package com.meteor.starvaxremote.ui.main;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +29,10 @@ import com.meteor.starvaxremote.repository.ShowRepository;
 import java.util.List;
 import java.util.Objects;
 
-public class ConnectionFragment extends Fragment implements View.OnClickListener {
+import static android.content.Context.MODE_PRIVATE;
+
+public class ConnectionFragment extends Fragment
+        implements View.OnClickListener, View.OnFocusChangeListener {
 
    private final ShowRepository mRepository;
    private final RequestAgent mRequestAgent;
@@ -90,25 +97,36 @@ public class ConnectionFragment extends Fragment implements View.OnClickListener
       mSynchronizeButton.setOnClickListener(this);
 
       mServerAddressText = getView().findViewById(R.id.text_serverIP);
+      mServerAddressText.setOnFocusChangeListener(this);
       mPasswordText = getView().findViewById(R.id.text_Password);
+      mPasswordText.setOnFocusChangeListener(this);
 
       TextView titleView = getView().findViewById(R.id.text_show_title);
-      titleView.setText( mLastShowTitle);
+      titleView.setText(mLastShowTitle);
 
       // initial state
-      updateConnectionData( mRepository.getConnectionData().getValue());
+      updateConnectionData(mRepository.getConnectionData().getValue());
 
-      /* *** temp !!! remove !!!! *** */
-      mServerAddressText.setText("192.168.1.6");
-      mPasswordText.setText("remoto");
-      /* ***************************** */
+      applyPreferences();
+   }
+   private void applyPreferences() {
+      SharedPreferences sharedPreferences = Objects.requireNonNull(getActivity()).getPreferences(MODE_PRIVATE);
+      String key, value;
+
+      key = getString(R.string.settings_server_ip_address);
+      value = sharedPreferences.getString(key, "");
+      mServerAddressText.setText(value);
+
+      key = getString(R.string.settings_password);
+      value = sharedPreferences.getString(key, "");
+      mPasswordText.setText(value);
    }
 
    private void updateConnectionData(ConnectionServerModel model) {
       mLastShowTitle = model.getShowTitle();
       if (getView() != null) {
          TextView titleView = getView().findViewById(R.id.text_show_title);
-         titleView.setText( mLastShowTitle);
+         titleView.setText(mLastShowTitle);
       }
 
       try {
@@ -134,8 +152,7 @@ public class ConnectionFragment extends Fragment implements View.OnClickListener
                mSynchronizeButton.setEnabled(true);
                break;
          }
-      }
-      catch ( NullPointerException ex) {
+      } catch (NullPointerException ex) {
          // no problem; this happens on startup
       }
    }
@@ -161,4 +178,31 @@ public class ConnectionFragment extends Fragment implements View.OnClickListener
       }
    }
 
+   @SuppressLint("StringFormatInvalid")
+   @Override
+   public void onFocusChange(View view, boolean gained) {
+
+      // check for focus lost
+      if (gained == false) {
+         SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+         SharedPreferences.Editor settingsEditor = sharedPreferences.edit();
+
+         if (view.getId() == R.id.text_serverIP) {
+            EditText widget = (EditText) view;
+            String newValue = widget.getText().toString();
+
+            // store server IP to persistent settings
+            settingsEditor.putString(getString(R.string.settings_server_ip_address), newValue);
+            settingsEditor.apply();
+            System.out.println("saved setting");
+
+         } else if (view.getId() == R.id.text_Password) {
+            // store password to persistent settings
+            EditText widget = (EditText) view;
+            settingsEditor.putString(getString(R.string.settings_password),
+                    widget.getText().toString());
+            settingsEditor.apply();
+         }
+      }
+   }
 }

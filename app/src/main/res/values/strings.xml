@@ -26,4 +26,10 @@
     <!-- light preset fragment -->
     <string name="lightPresetPage_caption">Light preset</string>
     <string name="lightPresetPage_trigger">TRIGGER</string>
+
+    <!-- Open Web Net-->
+    <string name="ownPage_caption">Open Web Net</string>
+    <string name="own_fragment_on_description">turn light on</string>
+    <string name="own_fragment_off_description">turn light off</string>
+    <string name="own_fragment_apply_description">apply level (for dimmerable lights)</string>
 </resources>

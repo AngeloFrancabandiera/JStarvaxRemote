@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_layout"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -16,13 +17,14 @@
 
     <TextView
         android:id="@+id/label_holder"
-        android:padding="10dp"
+        android:padding="12dp"
         android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:textAlignment="textStart"
         android:gravity="center"
-        android:text="LABEL PLACEHOLDER"/>
+        android:text="LABEL PLACEHOLDER"
+        tools:ignore="RtlCompat" />
 
 </LinearLayout>

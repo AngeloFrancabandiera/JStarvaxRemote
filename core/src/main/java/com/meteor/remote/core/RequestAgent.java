@@ -26,7 +26,7 @@ public class RequestAgent {
       _requestSender.sendRequest(Request.GET_TRACK_LIST, Collections.singletonList("A"));
       _requestSender.sendRequest(Request.GET_TRACK_LIST, Collections.singletonList("B"));
       _requestSender.sendRequest(Request.GET_LIGHT_LIST, _emptyString);
-//      _requestSender.sendRequest(Request.GET_OPEN_WEB_NET_LIST, _emptyString);
+      _requestSender.sendRequest(Request.GET_OPEN_WEB_NET_LIST, _emptyString);
 //      _requestSender.sendRequest(Request.GET_SEQUENCE_ENTRIES_LIST, _emptyString);
    }
 
@@ -51,24 +51,25 @@ public class RequestAgent {
    }
 
    public void activateMedia(String lineTag, String mediaLabel) {
-      _requestSender.sendRequest(Request.SET_ACTIVE_MEDIA,
-              Collections.singletonList(mediaLabel));
+      List<String> params = new ArrayList<>();
+      params.add( lineTag);
+      params.add( mediaLabel);
+      _requestSender.sendRequest(Request.SET_ACTIVE_MEDIA, params);
    }
 
-   public void triggerLightPreset(String presetLabel) {
-      _requestSender.sendRequest(Request.CONTROL_LIGHT_PRESET,
-              Collections.singletonList("START"));
-   }
+   public void triggerLightPreset(String presetLabel, boolean start) {
+      List<String> params = new ArrayList<>();
+      params.add( presetLabel);
 
-//   private void controlSequence(String action) {
-//      _requestSender.sendRequest(Request.CONTROL_SEQUENCE,
-//              Collections.singletonList(action));
-//   }
-//
-//   private void setActiveSequenceEntry(String label) {
-//      _requestSender.sendRequest(Request.SET_ACTIVE_SEQUENCE_ENTRY,
-//              Collections.singletonList(label));
-//   }
+      if (start) {
+         params.add("START");
+      }
+      else {
+         params.add("DONT_START");
+      }
+
+      _requestSender.sendRequest(Request.CONTROL_LIGHT_PRESET, params);
+   }
 
    public void controlOpenWebNet(String zoneName, String level) {
       String where = _ownWhereTable.where(zoneName);

@@ -57,7 +57,7 @@ public class GetOwnModelReply implements ReplyListener {
       while (argsIterator.hasNext()) {
          String arg = (String) argsIterator.next();
 
-         tokens = Arrays.asList(arg.split("\\s*,\\s*"));
+         tokens = Arrays.asList(arg.split(";"));
 
          if (tokens.size() >= 3) {
             zone = tokens.get(0);
@@ -65,7 +65,7 @@ public class GetOwnModelReply implements ReplyListener {
             dimmerable = tokens.get(2);
 
             // append item at the end
-            if (dimmerable == "DIMMER") {
+            if (dimmerable.equals("DIMMER")) {
                _ownModel.append(new ListItem(zone, "DIMMER"));
             } else {
                _ownModel.append(new ListItem(zone, "NO_DIMMER"));

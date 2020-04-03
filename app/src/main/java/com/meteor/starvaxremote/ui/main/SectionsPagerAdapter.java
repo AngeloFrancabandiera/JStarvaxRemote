@@ -10,13 +10,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.meteor.remote.core.RequestAgent;
-import com.meteor.remote.core.interfaces.CoreEventListener;
 import com.meteor.remote.core.protocol.RequestFormatter;
 import com.meteor.remote.core.protocol.ServerConnection;
 import com.meteor.starvaxremote.CoreEventsHandler;
+import com.meteor.starvaxremote.LightSetEventHandler;
+import com.meteor.starvaxremote.OwnEventHandler;
 import com.meteor.starvaxremote.PlaylistEventHandler;
 import com.meteor.starvaxremote.R;
-import com.meteor.starvaxremote.LightSetEventHandler;
 import com.meteor.starvaxremote.factory.ApplicationFactory;
 import com.meteor.starvaxremote.repository.ShowRepository;
 
@@ -25,7 +25,6 @@ import com.meteor.starvaxremote.repository.ShowRepository;
  * one of the sections/tabs/pages.
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
 
    @StringRes
    private static final int[] TAB_TITLES = new int[]{
@@ -74,27 +73,31 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
       Fragment fragment = new Fragment();
       switch (position) {
          case 0:
-            fragment = new ConnectionFragment( mRepository,
+            fragment = new ConnectionFragment(mRepository,
                     mServerConnection, mRequestFormatter, mRequestAgent);
             break;
 
          case 1:
             fragment = PlaylistFragment.newInstance("A", mRepository, mCoreEvents);
-            PlaylistEventHandler playlistEventHandlerA = new PlaylistEventHandler( (PlaylistFragment)fragment,
-                    mRequestFormatter, mServerConnection);
+            PlaylistEventHandler playlistEventHandlerA =
+                    new PlaylistEventHandler((PlaylistFragment) fragment, mRequestAgent);
             break;
 
          case 2:
             fragment = PlaylistFragment.newInstance("B", mRepository, mCoreEvents);
-            PlaylistEventHandler playlistEventHandlerB = new PlaylistEventHandler( (PlaylistFragment)fragment,
-                    mRequestFormatter, mServerConnection);
+            PlaylistEventHandler playlistEventHandlerB =
+                    new PlaylistEventHandler((PlaylistFragment) fragment, mRequestAgent);
             break;
 
          case 3:
-         case 4:
             fragment = LightPresetFragment.newInstance(mRepository, mCoreEvents);
-            LightSetEventHandler lightHandler = new LightSetEventHandler( (LightPresetFragment)fragment,
-                    mRequestFormatter, mServerConnection);
+            LightSetEventHandler lightHandler =
+                    new LightSetEventHandler((LightPresetFragment) fragment, mRequestAgent);
+            break;
+
+         case 4:
+            fragment = OwnFragment.newInstance(mRepository, mCoreEvents);
+            OwnEventHandler ownHandler = new OwnEventHandler((OwnFragment) fragment, mRequestAgent);
             break;
 
          default:

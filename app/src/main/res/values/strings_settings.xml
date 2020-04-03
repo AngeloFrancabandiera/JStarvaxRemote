@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="settings_server_ip_address">settings: server IP</string>
+    <string name="settings_password">settings: password</string>
+</resources>
