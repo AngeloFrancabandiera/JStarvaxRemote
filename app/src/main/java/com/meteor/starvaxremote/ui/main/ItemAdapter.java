@@ -22,12 +22,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
    public interface ItemClickedListener {
 
-      /** called when an item has been clicked */
-      void onItemClicked( ListItem item);
+      /**
+       * called when an item has been clicked
+       */
+      void onItemClicked(ListItem item);
    }
 
    private GeneralListModel mModel;
    private ItemClickedListener mItemClickedListener;
+
+   private int mSelectedItemPosition = -1;
 
    private static final Map<String, Integer> IconResourceMap = new HashMap<String, Integer>();
 
@@ -70,8 +74,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
    @Override
    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-      View view = LayoutInflater.from(parent.getContext()).
-              inflate(R.layout.singleitem_layout, parent, false);
+      View view;
+
+      if (viewType == R.layout.singleitem_selected_layout) {
+         view = LayoutInflater.from(parent.getContext()).
+                 inflate(R.layout.singleitem_selected_layout, parent, false);
+      } else {
+         view = LayoutInflater.from(parent.getContext()).
+                 inflate(R.layout.singleitem_layout, parent, false);
+      }
+
       return new ViewHolder(view);
    }
    @Override
@@ -88,8 +100,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
          @Override
          public void onClick(View view) {
 
+            mSelectedItemPosition = position;
+            notifyItemChanged( position);
+
             if (mItemClickedListener != null) {
-               mItemClickedListener.onItemClicked( mModel.getItem(position));
+               mItemClickedListener.onItemClicked(mModel.getItem(position));
             }
          }
       });
@@ -100,7 +115,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
       return mModel.length();
    }
 
-   public void setOnItemClickedListener( ItemClickedListener itemClickedListener) {
+   @Override
+   public int getItemViewType(int position) {
+
+      if (position == mSelectedItemPosition) {
+         return R.layout.singleitem_selected_layout;
+      } else {
+         return R.layout.singleitem_layout;
+      }
+   }
+
+   public void setOnItemClickedListener(ItemClickedListener itemClickedListener) {
       mItemClickedListener = itemClickedListener;
    }
 

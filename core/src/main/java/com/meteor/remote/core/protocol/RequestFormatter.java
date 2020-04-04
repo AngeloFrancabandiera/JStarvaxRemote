@@ -40,11 +40,16 @@ public class RequestFormatter {
          // 'append' for char array is the plain sequence of chars
          String singleParam = params.get(i);
 
+         if (singleParam == null) {
+            // this happens when one parameter is not specified
+            singleParam = "";
+         }
+
          // string to List<Byte>
          for (byte ch : singleParam.getBytes()) {
             request.add((Byte) ch);
          }
-         request.add(Protocol.SEPARATOR); // controllare !!!!!!
+         request.add(Protocol.SEPARATOR);
       }
 
       // terminators. Note that 'params.size' may be 0, so all terminators are always added.

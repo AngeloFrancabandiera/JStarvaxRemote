@@ -32,4 +32,6 @@
     <string name="own_fragment_on_description">turn light on</string>
     <string name="own_fragment_off_description">turn light off</string>
     <string name="own_fragment_apply_description">apply level (for dimmerable lights)</string>
+    <string name="icon_of_item">icon of item</string>
+    <string name="label_placeholder">LABEL PLACEHOLDER</string>
 </resources>
